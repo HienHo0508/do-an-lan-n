@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dancing Queen</title>
+    <script
+            type="module"
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <style>
+        #container {
+            height: 2200px;
+            width: 100%; /* rộng 1000px */
+            margin: 0px auto; /* canh giữa  màn hình */
+            text-align: center; /* text bên trong căn giữa */
+            font-size: 30px;
+            color: #dacfcf;
+            font-family: sans-serif;
+
+        }
+        #header {
+            height: 50px;
+            background: #314a70;
+            font-size: 15px;
+            text-decoration-line: none;
+            margin: auto;
+            line-height: 50px;
+        }
+        #header p {
+            width: 250px;
+            display:inline-block;
+
+        }
+        #header p a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        #header p a:hover {
+            color: yellow;
+        }
+        .content {
+            float: left;
+            width:60%;
+            height: 2000px;
+
+
+        }
+        .sidebar {
+            width: 40%;
+            float: right;
+
+            height: 1000px;
+
+
+            margin-top: 60px;
+            color: red;
+
+
+
+        }
+        .sidebar img {
+            width:200px;
+            height: auto;
+            margin-top: 30px;
+          margin-left: 200px;
+            object-fit: cover;
+            border:deeppink  2px solid;
+
+        }
+        .sidebar p {
+           font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #2433e0;
+        }
+        .clear {
+            clear: both;
+        }
+        #footer {
+            height: 30px;
+
+            width: 100%;
+
+
+
+
+            margin-top:1500px;
+        }
+        #footer p {
+           text-align: center;
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+        input,
+        textarea,
+        select,
+        button {
+            outline: none;
+        }
+        input {
+            line-height: normal;
+        }
+        label,
+        button {
+            cursor: pointer;
+        }
+        a {
+            text-decoration: none;
+        }
+        img {
+
+            object-fit: cover;
+            height: 50px;
+
+
+            display: block;
+
+
+        }
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 2500px;
+
+
+
+        }
+        .music {
+
+            border-radius: 10px;
+
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            padding: 0px;
+            height: 200px;
+            margin-top:20px;
+            background:#121537;
+            margin-left: 10px;
+        }
+        .music-thumb {
+
+            height: 100px;
+            margin: 0 auto -10px;
+            width: auto;
+
+
+        }
+        .music-thumb.is-playing {
+            animation: spinner 5s infinite linear;
+        }
+        .music-thumb img {
+            width: auto;
+            height: 100px;
+            margin: auto;
+            object-fit: cover;
+            border: brown;
+            padding-top: 10px;
+
+
+        }
+        .music-name {
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        .timer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: black;
+
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0 40px;
+            margin-top: -25px;
+            font-size: 20px;
+            color: white;
+
+
+        }
+        .play {
+            position: relative;
+        }
+        .play:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right bottom, #ff6bcb, #ffb86c);
+            transform: scale(1.5);
+            border-radius: 100rem;
+        }
+        .player-inner {
+            width: 20px;
+            height: 20px;
+            border-radius: 100rem;
+            background-color: white;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            font-size: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .play-repeat,
+        .play-back,
+        .play-forward {
+            cursor: pointer;
+
+        }
+        .range {
+            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+            width: 100%; /* Specific width is required for Firefox. */
+           color: white;
+            margin-bottom: 20px;
+        }
+        .range::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background-color:white;
+            opacity: 0.4;
+        }
+        .range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            background-color: #20e3b2;
+            width: 15px;
+            height: 15px;
+            border-radius: 100rem;
+            margin-top: -8px;
+            box-shadow: 0 0 0 3px white, 0 0 0 6px rgba(100, 100, 111, 0.05);
+        }
+        @keyframes spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .play-repeat {
+            font-size: 20px;
+        }
+        .Songlist {
+            height: 3170px;
+
+            overflow: scroll;
+
+        }
+        section {
+            height: 100px;
+
+            margin-top: 30px;
+            display: flex;
+            font-size: 16px;
+            line-height: 100px;
+
+        }
+        section img {
+            width: auto;
+            height: 100px;
+            margin-left: 10px;
+            object-fit: cover;
+            border: brown;
+
+
+        }
+        section p {
+            color: black;
+            text-align: left;
+            width: 300px;
+            padding-left: 5px;
+
+
+        }
+        section audio {
+            height: 20px;
+           margin-top: 40px;
+            margin-left: 0px;
+        }
+        div.Songlist > h6 {
+            color: red;
+            font-size: 18px;
+            margin-left: -600px;
+            margin-top: 20px;}
+        .content h6 {
+            color: red;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-left: -500px;
+        }
+        #header #homepage{
+            color: #e033d5;
+            font-size: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <div id="header">
+
+        <p ><a href="#" id="homepage">Home Page</a></p>
+        <p><a href="#">Top 10 Best US UK Songs</a></p>
+        <p><a href="#">Top 10 Best Vietnamese Songs</a></p>
+        <p><a href="#">Top 10 Best Korean Songs</a></p>
+        <p><a href="#">Top 10 Best Japanese Songs</a></p>
+    </div>
+    <div id="main">
+        <div class="content">
+            <h6>TOP 100 US UK SONGS</h6>
+            <div class="music">
+                <div class="music-thumb">
+                    <img src="https://static.stereogum.com/uploads/2019/10/ABBA-Dancing-Queen-1570816662-520x516.jpeg" alt="" />
+                </div>
+                <h3 class="music-name">Happy New Year</h3>
+                <input type="range" name="range" id="range" class="range" />
+                <audio src="http://webcoban.vn/file/bell.mp3" id="song">
+                 Trình duyệt không hỗ trợ phát âm thanh
+                </audio>
+                <div class="timer">
+                    <div class="duration">2:10</div>
+                    <div class="remaining">-3:10</div>
+                </div>
+                <div class="controls">
+                    <ion-icon name="heart-outline" class="play-infinite"></ion-icon>
+                    <ion-icon name="play-back" class="play-back"></ion-icon>
+                    <div class="play">
+                         <div class="player-inner">
+                             <ion-icon name="play" class="play-icon"></ion-icon>
+                         </div>
+                    </div>
+                    <ion-icon name="play-forward" class="play-forward"></ion-icon>
+                    <ion-icon name="arrow-down-circle-outline" class="play-repeat"></ion-icon>
+                </div>
+            </div>
+            <div class="Songlist">
+                <h6> Playlist</h6>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>1. Dancing Queen - ABBA</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>2. Happy New Year - ABBA</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b> 3. I Have A Dream - ABBA</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>4. Money Money Money - ABBA</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>5. Love Yourself- Justin Bieber</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>6. Why Not Me- Enrique Iglesias</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>7. Maps- Maroon 5</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>8. Faded- Alan Walker</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>9. Let Her Go- Passenger</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>11. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>12. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>13. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>14. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>15. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>16. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>17. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>18. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>19. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>20. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>30. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>40. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>50. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>60. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>70. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>80. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>90. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+                <section >
+                    <img src="images/Happy%20New%20Year%20.jpg"/>
+                    <p> <b>100. Paris In The Rain- Lauv</b> </p>
+                    <audio controls src="Music%20file/Happy%20New%20Year.mp3" >
+                        Trình duyệt không hỗ trợ phát âm thanh
+                    </audio>
+                </section>
+
+
+
+
+
+                </div>
+
+
+        </div>
+        <div class="sidebar">
+            <h5>Top 10 nghệ sĩ nổi bật</h5>
+            <div>
+                <img src="images/Ariana_Grande%202.jpg">
+                <p> Ariana_Grande</p>
+            </div>
+            <div>
+                <img src="images/billie%20eillish.jpg">
+                <p> Billie Eillish</p>
+            </div>
+            <div>
+                <img src="images/Bruno%20Mars%201.jpg">
+                <p> Bruno Mars</p>
+            </div>
+            <div>
+                <img src="images/westlifet.jpg">
+                <p> Westlife</p>
+            </div>
+            <div>
+                <img src="images/Justin2.jpg">
+                <p> Justin Bieber</p>
+            </div>
+            <div>
+                <img src="images/Enrique.jpg">
+                <p> Enrique Iglesias</p>
+            </div>
+            <div>
+                <img src="images/Alan.jpg">
+                <p> Alan Walker</p>
+            </div>
+            <div>
+                <img src="images/Passenger-1983.jpg">
+                <p> Passenger</p>
+            </div>
+            <div>
+                <img src="images/lauv.jpg">
+                <p> Lauv</p>
+            </div>
+
+            <div>
+                <img src="images/shaye.jpg">
+                <p> shayne ward</p>
+            </div>
+            <div>
+                <img src="images/my%20tam.jpg">
+                <p> My Tam</p>
+            </div>
+            <div>
+                <img src="images/taylor.png">
+                <p> Taylor Swift</p>
+            </div>
+
+            <div>
+                <img src="images/britney%20spears.jpg">
+                <p> Britney Spears</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="footer"> <p><a href="#">Về đầu trang</a></p>
+
+    </div>
+</div>
+
+<script src="/music%20page%20JS/Dancing%20Queen.js"></script>
+</body>
+</html>
+
+</body>
+</html>
